@@ -1,19 +1,41 @@
 {
+  "name": "rozehnal/environment-parameters",
+  "description": "Composer script building your detached parameters for deploying the app. Build above the great incenteev/composer-parameter-handler library.",
+  "keywords": ["parameters management"],
+  "homepage": "https://github.com/rozehnal/environment-parameters",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pavel Rozehnal",
+      "email": "rozehnal@gmail.com"
+    }
+  ],
   "require": {
-    "incenteev/composer-parameter-handler": "~2.0"
+    "php": ">=5.3.3",
+    "incenteev/composer-parameter-handler": "~2.0",
+    "symfony/yaml": "~2.3|~3.0"
+  },
+  "require-dev": {
+    "composer/composer": "1.0.*@dev"
   },
   "scripts": {
     "build": [
-      "rm -r ./build",
-      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+      "Paro\\BuildParametersHandler\\ParametersHandler::buildParameters"
     ]
   },
+  "autoload": {
+    "psr-4": {
+      "Paro\\BuildParametersHandler\\": ""
+    }
+  },
   "extra": {
-    "incenteev-parameters": {
-      "file": "build/parameters.yml",
-      "dist-file": "config/parameters.yml",
-      "env-map": {
-        "path": "PATH"
+    "build-parameters": {
+      "build-folder": "build",
+      "incenteev-parameters": {
+        "file": "parameters.yml",
+        "env-map": {
+          "path": "PATH"
+        }
       }
     }
   }
