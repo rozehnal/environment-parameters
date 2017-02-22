@@ -1,0 +1,20 @@
+{
+  "require": {
+    "incenteev/composer-parameter-handler": "~2.0"
+  },
+  "scripts": {
+    "build": [
+      "rm -r ./build",
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+    ]
+  },
+  "extra": {
+    "incenteev-parameters": {
+      "file": "build/parameters.yml",
+      "dist-file": "config/parameters.yml",
+      "env-map": {
+        "path": "PATH"
+      }
+    }
+  }
+}
