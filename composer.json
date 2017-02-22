@@ -18,25 +18,14 @@
   "require-dev": {
     "composer/composer": "1.0.*@dev"
   },
-  "scripts": {
-    "build": [
-      "Paro\\BuildParametersHandler\\ParametersHandler::buildParameters"
-    ]
-  },
   "autoload": {
     "psr-4": {
       "Paro\\BuildParametersHandler\\": ""
     }
   },
   "extra": {
-    "build-parameters": {
-      "build-folder": "build",
-      "incenteev-parameters": {
-        "file": "parameters.yml",
-        "env-map": {
-          "path": "PATH"
-        }
-      }
+    "branch-alias": {
+      "dev-master": "0.x-dev"
     }
   }
 }

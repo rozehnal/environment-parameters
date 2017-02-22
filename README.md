@@ -1,7 +1,7 @@
 # Composer script building your detached parameters for deploying the app
 
 This tool allows you to manage app parameters for deployment in separate repositories. The repo is fully 
-compatible with all parameters from https://github.com/rozehnal/ParameterHandler .
+compatible with all parameters from https://github.com/Incenteev/ParameterHandler.
 
 ## Run
 ``composer run-script build --no-interaction``
@@ -30,7 +30,14 @@ Add the following in your root composer.json file:
             }
           }
         }
-      }
+      },
+      "minimum-stability": "dev",
+      "repositories": [
+          {
+            "type": "vcs",
+            "url": "https://github.com/rozehnal/environment-parameters"
+          }
+        ]
 }
 ```
 
