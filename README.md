@@ -13,7 +13,7 @@ Add the following in your root composer.json file:
 ```json
 {
     "require": {
-        "rozehnal//environment-parameters": "*"
+        "rozehnal/environment-parameters": "0.x-dev"
     },
     "scripts": {
        "build": [
@@ -31,7 +31,6 @@ Add the following in your root composer.json file:
           }
         }
       },
-      "minimum-stability": "dev",
       "repositories": [
           {
             "type": "vcs",
