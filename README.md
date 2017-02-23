@@ -49,3 +49,12 @@ by asking you the missing parameters.
 
 ## Example
 https://github.com/rozehnal/environment-parameters-test
+
+## Todo
+ - process imports
+
+```
+ imports:
+     - { resource: 'include.yml' }
+
+```
