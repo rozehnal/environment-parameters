@@ -1,4 +1,4 @@
-# Composer script building your detached parameters for deploying the app
+# Composer script building your detached parameters for deploying your app
 
 This tool allows you to manage app parameters for deployment in separate repositories. The repo is fully 
 compatible with all parameters from https://github.com/Incenteev/ParameterHandler.
@@ -7,7 +7,6 @@ compatible with all parameters from https://github.com/Incenteev/ParameterHandle
 ``composer run-script build --no-interaction -- --env=prod``
 
 ## Usage
-
 Add the following in your root composer.json file:
 
 ```json
@@ -36,16 +35,13 @@ Add the following in your root composer.json file:
             }
           }
         }
-      },
-      "repositories": [
-          {
-            "type": "vcs",
-            "url": "https://github.com/rozehnal/environment-parameters"
-          }
-        ]
+      }
 }
 ```
 
 The ``build/parameters.yml`` will then be created
 composer script, to match the structure of the dist file ``parameters.yml``
 by asking you the missing parameters.
+
+## Example
+https://github.com/rozehnal/environment-parameters-test
