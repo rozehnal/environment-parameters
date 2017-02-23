@@ -1,6 +1,7 @@
 <?php
 namespace Paro\BuildParametersHandler;
 use Composer\Script\Event;
+use Incenteev\ParameterHandler\Processor;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
 
@@ -31,7 +32,7 @@ class ParametersHandler
     		return true;
 	    }
 
-		$processor = new \Incenteev\ParameterHandler\Processor($event->getIO());
+		$processor = new Processor($event->getIO());
 		$parameters = $configs['incenteev-parameters'];
 		if (array_keys($parameters) !== range(0, count($parameters) - 1)) {
 			$parameters = array($parameters);
@@ -47,7 +48,7 @@ class ParametersHandler
 			$config['dist-file'] = $file;
 			$config['file'] = $configs['build-folder'] . '/' . (isset($config['name'])? $config['name'] : $file);
 			$processor->processFile($config);
-			self::updateComment($config['file']);
+			self::processFile($config);
 		}
     }
 
@@ -96,13 +97,27 @@ class ParametersHandler
 	}
 
 	private static function initBuildDirectory($dir) {
-		mkdir($dir);
+		if (!is_dir($dir)) {
+            mkdir($dir);
+        }
 	}
 
-    private static function updateComment($file)
+    private static function processFile($config)
     {
+        $file = $config['file'];
         $yamlParser = new Parser();
-        $values = $yamlParser->parse(file_get_contents($file));
+        $sourceValues = $yamlParser->parse(file_get_contents($file));
+        $values = array_map(function($item) {
+            $item = trim($item);
+            if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
+                $envName = substr(trim($item), 5);
+                $envName = substr($envName, 0, strlen($envName) - 2);
+                return getenv($envName);
+            } else {
+                return $item;
+            }
+        }, $sourceValues['parameters']);
+
         file_put_contents($file, sprintf("# This file is auto-generated during the build process at %s\n", date(DATE_ATOM)) . Yaml::dump($values, 99));
     }
 }
