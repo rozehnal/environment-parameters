@@ -4,7 +4,7 @@ This tool allows you to manage app parameters for deployment in separate reposit
 compatible with all parameters from https://github.com/Incenteev/ParameterHandler.
 
 ## Run
-``composer run-script build --no-interaction``
+``composer run-script build --no-interaction -- --env=prod``
 
 ## Usage
 
@@ -25,7 +25,8 @@ Add the following in your root composer.json file:
           "build-folder": "build",
           "files": [
 			{
-			  "path": "key.p12"
+			  "path": "{env}/key.{env}.p12",
+			  "name": "key.p12"
 			}
           ],
           "incenteev-parameters": {

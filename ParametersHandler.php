@@ -20,10 +20,10 @@ class ParametersHandler
 	    if (!isset($configs['build-folder'])) {
 		    $configs['build-folder'] = 'build';
 	    }
+
 	    self::initBuildDirectory($configs['build-folder']);
         self::processFiles($configs, $event);
         self::processIncenteevParameters($configs, $event);
-
     }
 
 	private static function processIncenteevParameters($configs, $event) {
@@ -42,11 +42,36 @@ class ParametersHandler
 				throw new \InvalidArgumentException('The extra.build-parameters setting must be an array of configuration objects.');
 			}
 
-			$config['dist-file'] = $config['file'];
-			$config['file'] = $configs['build-folder'] . '/' . $config['file'];
+			$file = self::preparePath($config['file'], $event);
+
+			$config['dist-file'] = $file;
+			$config['file'] = $configs['build-folder'] . '/' . $file;
 			$processor->processFile($config);
 			self::updateComment($config['file']);
 		}
+    }
+
+	private static function preparePath($path, $event) {
+		if (($env = self::getEnvParameter($event)) !== false) {
+			return str_replace("{env}", $env, $path);
+		} else {
+			return $path;
+		}
+	}
+
+    private static function getEnvParameter(Event $event) {
+    	$arguments = $event->getArguments();
+		if (!is_array($arguments)) {
+			return false;
+		}
+
+	    return array_reduce($arguments, function($ret, $item) {
+			if (substr(strtolower($item), 0, 5) == '--env') {
+				$val = explode('=', $item);
+				return trim($val[1]);
+			}
+		}, false);
+
     }
 
 	private static function processFiles($configs, $event) {
@@ -63,9 +88,10 @@ class ParametersHandler
 				throw new \InvalidArgumentException('The extra.files setting must be an array of configuration objects.');
 			}
 
-			$path = $file['path'];
-			copy($path, $configs['build-folder'] . '/' . $file['path']);
-			$event->getIO()->write(sprintf('<info>Copying the "%s" file</info>', $path));
+			$path = self::preparePath($file['path'], $event);
+			$destination = isset($file['name']) ? $file['name'] : $path;
+			copy($path, $configs['build-folder'] . '/' . $destination);
+			$event->getIO()->write(sprintf('<info>Copying the "%s" into "%s" file</info>', $path, $destination));
 		}
 	}
 
