@@ -45,7 +45,7 @@ class ParametersHandler
 			$file = self::preparePath($config['file'], $event);
 
 			$config['dist-file'] = $file;
-			$config['file'] = $configs['build-folder'] . '/' . $file;
+			$config['file'] = $configs['build-folder'] . '/' . (isset($config['name'])? $config['name'] : $file);
 			$processor->processFile($config);
 			self::updateComment($config['file']);
 		}
