@@ -23,6 +23,11 @@ Add the following in your root composer.json file:
     "extra": {
         "build-parameters": {
           "build-folder": "build",
+          "files": [
+			{
+			  "path": "key.p12"
+			}
+          ],
           "incenteev-parameters": {
             "file": "parameters.yml",
             "env-map": {
