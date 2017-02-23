@@ -90,7 +90,7 @@ class ParametersHandler
 			}
 
 			$path = self::preparePath($file['file'], $event);
-			$destination = $configs['build-folder'] . '/' . isset($file['name']) ? $file['name'] : $path;
+			$destination = $configs['build-folder'] . '/' . (isset($file['name']) ? $file['name'] : $path);
 			copy($path, $destination);
             if (isset($file['name'])) {
                 $event->getIO()->write(sprintf('<info>Copying the "%s" into "%s" file</info>', $path, $destination));
