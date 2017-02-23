@@ -24,7 +24,7 @@ Add the following in your root composer.json file:
           "build-folder": "build",
           "files": [
 			{
-			  "path": "{env}/key.{env}.p12",
+			  "file": "{env}/key.{env}.p12",
 			  "name": "key.p12"
 			}
           ],
@@ -45,7 +45,7 @@ by asking you the missing parameters.
 
 ## Supported syntax
  - Fully compatible with https://github.com/Incenteev/ParameterHandler
- - "%env(ENV_VARIABLE)%" syntax in .yml files
+ - ``"%env(ENV_VARIABLE)%"`` syntax in ``*.yml`` files
 
 ## Example
 https://github.com/rozehnal/environment-parameters-test

@@ -89,10 +89,15 @@ class ParametersHandler
 				throw new \InvalidArgumentException('The extra.files setting must be an array of configuration objects.');
 			}
 
-			$path = self::preparePath($file['path'], $event);
+			$path = self::preparePath($file['file'], $event);
 			$destination = isset($file['name']) ? $file['name'] : $path;
 			copy($path, $configs['build-folder'] . '/' . $destination);
-			$event->getIO()->write(sprintf('<info>Copying the "%s" into "%s" file</info>', $path, $destination));
+            if (isset($file['name'])) {
+                $event->getIO()->write(sprintf('<info>Copying the "%s" into "%s" file</info>', $path, $destination));
+            } else {
+                $event->getIO()->write(sprintf('<info>Copying the "%s" file</info>', $path));
+            }
+
 		}
 	}
 
