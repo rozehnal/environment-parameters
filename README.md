@@ -46,15 +46,13 @@ by asking you the missing parameters.
 ## Supported syntax
  - Fully compatible with https://github.com/Incenteev/ParameterHandler
  - ``"%env(ENV_VARIABLE)%"`` syntax in ``*.yml`` files
-
+ - ``imports`` in ``*.yml`` files
+```
+ imports:
+     - { resource: 'include.yml' }
+```
 ## Example
 https://github.com/rozehnal/environment-parameters-test
 
 ## Todo
- - process imports
 
-```
- imports:
-     - { resource: 'include.yml' }
-
-```
