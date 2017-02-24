@@ -2,7 +2,6 @@
 
 namespace Paro\BuildParametersHandler;
 
-use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Incenteev\ParameterHandler\Processor;
 use Symfony\Component\Yaml\Parser;
@@ -13,25 +12,24 @@ class IncenteevParametersProcessor
     private static $PARAMETER_KEY = null;
 
     /**
-     * @var IOInterface
-     */
-    private $io;
-    /**
      * @var FileHandler
      */
     private $fileHandler;
 
     /**
      * IncenteevParametersProcessor constructor.
-     * @param IOInterface $io
      * @param FileHandler $fileHandler
      */
-    public function __construct(IOInterface $io, FileHandler $fileHandler)
+    public function __construct(FileHandler $fileHandler)
     {
-        $this->io = $io;
         $this->fileHandler = $fileHandler;
     }
 
+    /**
+     * @param $configs
+     * @param Event $event
+     * @return bool
+     */
     public function process($configs, Event $event) {
         if (!isset($configs['incenteev-parameters'])) {
             return true;
@@ -54,18 +52,27 @@ class IncenteevParametersProcessor
                 throw new \InvalidArgumentException('The extra.build-parameters setting must be an array of configuration objects.');
             }
 
-            $file = $this->fileHandler->preparePath($config['file'], $event->getArguments());
+            $file = $this->fileHandler->preparePath($config['file']);
 
 
-            $config['dist-file'] = $config['file'];
-            $config['file'] = $configs['build-folder'] . '/' . (isset($config['name'])? $config['name'] : $file);
+            $config['dist-file'] = $file;
+            $config['file'] = $this->fileHandler->preparePath($configs['build-folder'] . '/' . (isset($config['name'])? $config['name'] : $file));
             $this->processFile($config['dist-file'], $config['file']);
 
             $config['dist-file'] = $config['file'];
             $processor->processFile($config);
+
+            $this->updateCommentInFile($config['file']);
         }
+
+        return true;
     }
 
+    /**
+     * @param $inFile
+     * @param null $outFile
+     * @return array|bool|mixed
+     */
     public function processFile($inFile, $outFile = null)
     {
         $yamlParser = new Parser();
@@ -75,7 +82,7 @@ class IncenteevParametersProcessor
 
         if (isset($values['imports']) && is_array($values['imports'])) {
             foreach ($values['imports'] as $importFile) {
-                $parametersFromFile = $this->processFile(dirname($inFile) . DIRECTORY_SEPARATOR . $importFile['resource']);
+                $parametersFromFile = $this->processFile($this->fileHandler->resolvePath(dirname($inFile), $importFile['resource']));
                 $values = array_replace_recursive($parametersFromFile, $values);
             }
             unset($values['imports']);
@@ -86,6 +93,8 @@ class IncenteevParametersProcessor
         } else {
             return $values;
         }
+
+        return true;
     }
 
     protected function updateCommentInFile($file)

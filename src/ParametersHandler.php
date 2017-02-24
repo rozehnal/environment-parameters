@@ -17,7 +17,7 @@ class ParametersHandler
             throw new \InvalidArgumentException('The extra.build-parameters setting must be an array or a configuration object.');
         }
 
-	    $fileHandler = new FileHandler($event->getIO());
+	    $fileHandler = new FileHandler($event->getArguments());
 
         if (!isset($configs['build-folder'])) {
             $configs['build-folder'] = 'build';
@@ -25,9 +25,9 @@ class ParametersHandler
         $fileHandler->initDirectory($configs['build-folder']);
 
 	    $fileProcessor = new FileProcessor($event->getIO(), $fileHandler);
-        $fileProcessor->process($configs, $event);
+        $fileProcessor->process($configs);
 
-        $incenteevProcessor = new IncenteevParametersProcessor($event->getIO(), $fileHandler);
+        $incenteevProcessor = new IncenteevParametersProcessor($fileHandler);
         $incenteevProcessor->process($configs, $event);
     }
 }

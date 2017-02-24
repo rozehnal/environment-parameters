@@ -14,18 +14,17 @@ class FileHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->fileHandler = new FileHandler();
+        $this->fileHandler = new FileHandler(array('--env=prod'));
     }
 
     /**
      * @dataProvider testPreparePathProvider
      * @param $path
-     * @param $arguments
      * @param $expected
      */
-    public function testPreparePath($path, $arguments, $expected)
+    public function testPreparePath($path, $expected)
     {
-        $this->assertEquals($expected, $this->fileHandler->preparePath($path, $arguments));
+        $this->assertEquals($expected, $this->fileHandler->preparePath($path));
     }
 
     public function testPreparePathProvider()
@@ -33,12 +32,10 @@ class FileHandlerTest extends \PHPUnit_Framework_TestCase
         return array(
             'without env parameter' => array(
                 'path' => 'folder/parameters.yml',
-                'arguments' => array('--env=prod'),
                 'expected' => 'folder/parameters.yml'
             ),
             'with env parameter' => array(
                 'path' => '{env}/parameters.yml',
-                'arguments' => array('--env=prod'),
                 'expected' => 'prod/parameters.yml'
             )
         );

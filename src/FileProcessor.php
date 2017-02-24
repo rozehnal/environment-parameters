@@ -28,7 +28,11 @@ class FileProcessor
         $this->fileHandler = $fileHandler;
     }
 
-    public function process($configs, Event $event)
+    /**
+     * @param $configs
+     * @return bool
+     */
+    public function process($configs)
     {
         if (!isset($configs['files'])) {
             return true;
@@ -43,7 +47,7 @@ class FileProcessor
                 throw new \InvalidArgumentException('The extra.files setting must be an array of configuration objects.');
             }
 
-            $path = $this->fileHandler->preparePath($file['file'], $event->getArguments());
+            $path = $this->fileHandler->preparePath($file['file']);
             $destination = $configs['build-folder'] . '/' . (isset($file['name']) ? $file['name'] : $path);
             copy($path, $destination);
             if (isset($file['name'])) {
@@ -53,6 +57,7 @@ class FileProcessor
             }
 
         }
+        return true;
     }
 
 }
