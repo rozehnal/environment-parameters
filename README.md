@@ -3,6 +3,11 @@
 This tool allows you to manage app parameters for deployment in separate repositories. The repo is fully 
 compatible with all parameters from https://github.com/Incenteev/ParameterHandler.
 
+
+[![Build Status](https://travis-ci.org/rozehnal/environment-parameters.png)](https://travis-ci.org/rozehnal/environment-parameters)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rozehnal/environment-parameters/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rozehnal/environment-parameters/?branch=master)
+[![Latest Unstable Version](https://poser.pugx.org/incenteev/composer-parameter-handler/v/unstable.png)](https://packagist.org/packages/rozehnal/environment-parameters/)
+
 ## Run
 ``composer run-script build --no-interaction -- --env=prod``
 
