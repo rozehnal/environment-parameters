@@ -75,7 +75,7 @@ class IncenteevParametersProcessor
 
         if (isset($values['imports']) && is_array($values['imports'])) {
             foreach ($values['imports'] as $importFile) {
-                $parametersFromFile = $this->processFile($importFile['resource']);
+                $parametersFromFile = $this->processFile(dirname($inFile) . DIRECTORY_SEPARATOR . $importFile['resource']);
                 $values = array_replace_recursive($parametersFromFile, $values);
             }
             unset($values['imports']);
