@@ -3,7 +3,6 @@
 namespace Paro\BuildParametersHandler;
 
 use Composer\IO\IOInterface;
-use Composer\Script\Event;
 
 class FileProcessor
 {
