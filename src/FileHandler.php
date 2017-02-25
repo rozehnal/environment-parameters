@@ -19,7 +19,7 @@ class FileHandler
     }
 
     public function resolvePath($currentPath, $importPath) {
-        if (substr($importPath, 0, 1) == '/') {
+        if (substr($importPath, 0, 1) == DIRECTORY_SEPARATOR) {
             return $this->preparePath($importPath);
         } else {
             $path = dirname($currentPath) . DIRECTORY_SEPARATOR . $importPath;
@@ -28,16 +28,16 @@ class FileHandler
     }
 
     public function preparePath($path) {
-        if (($env = $this->getEnvParameter('env')) !== false) {
+        if (($env = $this->getArgumentValue('env')) !== false) {
             return str_replace("{env}", $env, $path);
         } else {
             return $path;
         }
     }
 
-    public function getEnvParameter($name) {
+    public function getArgumentValue($name) {
         return array_reduce($this->arguments, function($ret, $item) use ($name) {
-            if (substr(strtolower($item), 0, 5) == '--' . $name) {
+            if (substr(strtolower($item), 0, strlen($name)+2) == '--' . $name) {
                 $val = explode('=', $item);
                 return trim($val[1]);
             }

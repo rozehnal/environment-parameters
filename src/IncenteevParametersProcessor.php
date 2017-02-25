@@ -49,7 +49,7 @@ class IncenteevParametersProcessor
 
         foreach ($parameters as $config) {
             if (!is_array($config)) {
-                throw new \InvalidArgumentException('The extra.build-parameters setting must be an array of configuration objects.');
+                throw new \InvalidArgumentException('The extra.environment-parameters.incenteev-parameters setting must be an array of configuration objects.');
             }
 
             $file = $this->fileHandler->preparePath($config['file']);

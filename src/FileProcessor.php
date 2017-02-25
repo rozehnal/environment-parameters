@@ -43,7 +43,7 @@ class FileProcessor
         }
         foreach ($files as $file) {
             if (!is_array($file)) {
-                throw new \InvalidArgumentException('The extra.files setting must be an array of configuration objects.');
+                throw new \InvalidArgumentException('The extra.environment-parameters.files setting must be an array.');
             }
 
             $path = $this->fileHandler->preparePath($file['file']);

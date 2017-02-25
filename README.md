@@ -27,7 +27,7 @@ Add the following in your root composer.json file:
            ]
     },
     "extra": {
-        "build-parameters": {
+        "environment-parameters": {
           "build-folder": "build",
           "files": [
 			{
