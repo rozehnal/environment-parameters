@@ -7,10 +7,11 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider processProvider
+     * @param $env
      * @param $configs
      * @param $expected
      */
-    public function testProcess($configs, $expected)
+    public function testProcess($env, $configs, $expected)
     {
         $fs = $this->getMockBuilder('Symfony\\Component\\Filesystem\\Filesystem')
             ->setMethods(array('copy'))
@@ -29,7 +30,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         $fileHandler->expects($this->once())
             ->method('getArgumentValue')
             ->with($this->equalTo('env'))
-            ->willReturn('prod');
+            ->willReturn($env);
 
         $io = $this->getMockBuilder('Composer\\IO\\NullIO')
             ->disableOriginalConstructor()
@@ -47,7 +48,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
     public function processProvider()
     {
         return array(
-            'empty config simple' => array(
+            'simple config with name' => array(
+                'env' => 'prod',
                 'configs' => array(
                     'build-folder' => 'build',
                     'files' => array(
@@ -60,7 +62,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
                     'destination' => 'build/key.p12'
                 )
             ),
-            'empty config' => array(
+            'simple config without name' => array(
+                'env' => 'dev',
                 'configs' => array(
                     'build-folder' => 'builder',
                     'files' => array(
@@ -70,8 +73,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
                 'expected' => array(
-                    'source' => 'key.prod.p12',
-                    'destination' => 'builder/key.prod.p12'
+                    'source' => 'key.dev.p12',
+                    'destination' => 'builder/key.dev.p12'
                 )
             ),
         );
