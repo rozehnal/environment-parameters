@@ -107,7 +107,7 @@ class IncenteevParametersProcessor
 
     protected function procesEnvironmentalVariables(array $parameters)
     {
-        return array_map(function ($item) {
+        return array_map(function($item) {
             $item = trim($item);
             if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
                 $envName = substr(trim($item), 5);
