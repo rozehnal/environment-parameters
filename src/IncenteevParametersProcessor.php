@@ -108,13 +108,17 @@ class IncenteevParametersProcessor
     protected function procesEnvironmentalVariables(array $parameters)
     {
         return array_map(function($item) {
-            $item = trim($item);
-            if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
-                $envName = substr(trim($item), 5);
-                $envName = substr($envName, 0, strlen($envName) - 2);
-                return getenv($envName);
-            } else {
+            if (!is_string($item)) {
                 return $item;
+            } else {
+                $item = trim($item);
+                if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
+                    $envName = substr(trim($item), 5);
+                    $envName = substr($envName, 0, strlen($envName) - 2);
+                    return getenv($envName);
+                } else {
+                    return $item;
+                }
             }
         }, $parameters);
     }
