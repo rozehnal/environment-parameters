@@ -1,10 +1,7 @@
 <?php
 namespace Paro\BuildParametersHandler\Tests;
 
-use Composer\IO\NullIO;
-use Paro\BuildParametersHandler\FileHandler;
 use Paro\BuildParametersHandler\FileProcessor;
-use Symfony\Component\Filesystem\Filesystem;
 
 class FileProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +12,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($configs, $expected)
     {
-        $fs = $this->getMockBuilder(Filesystem::class)
+        $fs = $this->getMockBuilder('Symfony\\Component\\Filesystem\\Filesystem')
             ->setMethods(array('copy'))
             ->getMock();
 
@@ -24,7 +21,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($expected['source']), $this->equalTo($expected['destination']))
             ->willReturn(true);
 
-        $fileHandler = $this->getMockBuilder(FileHandler::class)
+        $fileHandler = $this->getMockBuilder('Paro\\BuildParametersHandler\\FileHandler')
             ->disableOriginalConstructor()
             ->setMethods(array('getArgumentValue'))
             ->getMock();
@@ -34,7 +31,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('env'))
             ->willReturn('prod');
 
-        $io = $this->getMockBuilder(NullIO::class)
+        $io = $this->getMockBuilder('Composer\\IO\\NullIO')
             ->disableOriginalConstructor()
             ->setMethods(array('write'))
             ->getMock();
