@@ -30,7 +30,8 @@ class IncenteevParametersProcessor
      * @param Event $event
      * @return bool
      */
-    public function process($configs, Event $event) {
+    public function process($configs, Event $event)
+    {
         if (!isset($configs['incenteev-parameters'])) {
             return true;
         }
@@ -56,7 +57,7 @@ class IncenteevParametersProcessor
 
 
             $config['dist-file'] = $file;
-            $config['file'] = $this->fileHandler->preparePath($configs['build-folder'] . '/' . (isset($config['name'])? $config['name'] : $file));
+            $config['file'] = $this->fileHandler->preparePath($configs['build-folder'] . '/' . (isset($config['name']) ? $config['name'] : $file));
             $this->processFile($config['dist-file'], $config['file']);
 
             $config['dist-file'] = $config['file'];
@@ -106,7 +107,7 @@ class IncenteevParametersProcessor
 
     protected function procesEnvironmentalVariables(array $parameters)
     {
-        return array_map(function($item) {
+        return array_map(function ($item) {
             $item = trim($item);
             if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
                 $envName = substr(trim($item), 5);

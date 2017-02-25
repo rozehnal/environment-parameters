@@ -3,6 +3,7 @@
 namespace Paro\BuildParametersHandler;
 
 use Composer\Script\Event;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ParametersHandler
 {
@@ -17,14 +18,15 @@ class ParametersHandler
             throw new \InvalidArgumentException('The extra.environment-parameters setting must be an array or a configuration object.');
         }
 
-	    $fileHandler = new FileHandler($event->getArguments());
+        $fs = new Filesystem();
+        $fileHandler = new FileHandler($fs, $event->getArguments());
 
         if (!isset($configs['build-folder'])) {
             $configs['build-folder'] = 'build';
         }
         $fileHandler->initDirectory($configs['build-folder']);
 
-	    $fileProcessor = new FileProcessor($event->getIO(), $fileHandler);
+        $fileProcessor = new FileProcessor($fs, $event->getIO(), $fileHandler);
         $fileProcessor->process($configs);
 
         $incenteevProcessor = new IncenteevParametersProcessor($fileHandler);

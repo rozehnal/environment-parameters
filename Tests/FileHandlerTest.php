@@ -1,7 +1,8 @@
 <?php
-namespace Incenteev\ParameterHandler\Tests;
+namespace Paro\BuildParametersHandler\Tests;
 
 use Paro\BuildParametersHandler\FileHandler;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FileHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +15,8 @@ class FileHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->fileHandler = new FileHandler(array('--env=prod'));
+        $fs = new Filesystem();
+        $this->fileHandler = new FileHandler($fs, array('--env=prod'));
     }
 
     /**
@@ -117,11 +119,13 @@ class FileHandlerTest extends \PHPUnit_Framework_TestCase
             rmdir($dir);
         }
 
+        //currently doesn't exists
         $this->assertFalse(is_dir($dir));
 
         //create one
         $this->fileHandler->initDirectory($dir);
         $this->assertTrue(is_dir($dir));
+
         //if is existing
         $this->fileHandler->initDirectory($dir);
         $this->assertTrue(is_dir($dir));
