@@ -67,7 +67,7 @@ class IncenteevParametersProcessor
                 throw new \InvalidArgumentException('The extra.environment-parameters.incenteev-parameters setting must be an array of configuration objects.');
             }
 
-            $file = $this->fileHandler->preparePath($config['file']);
+            $file = $this->fileHandler->findFile($config['file']);
 
 
             $config['dist-file'] = $file;
@@ -92,7 +92,7 @@ class IncenteevParametersProcessor
     public function processFile($inFile, $outFile = null, array $stack = array())
     {
         $yamlParser = new Parser();
-        $values = $yamlParser->parse(file_get_contents($inFile));
+        $values = $yamlParser->parse(file_get_contents($this->fileHandler->findFile($inFile)));
 
         $values[self::$PARAMETER_KEY] = $this->procesEnvironmentalVariables($values[self::$PARAMETER_KEY]);
 

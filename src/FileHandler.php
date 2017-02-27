@@ -39,9 +39,18 @@ class FileHandler
         }
     }
 
-    public function preparePath($path)
+    /**
+     * @param $path
+     * @param null $env
+     * @return mixed
+     */
+    public function preparePath($path, $env = null)
     {
-        if (($env = $this->getArgumentValue('env')) !== false) {
+        if (is_null($env)) {
+            $env = $this->getArgumentValue('env');
+        }
+
+        if ($env !== false) {
             return str_replace("{env}", $env, $path);
         } else {
             return $path;
@@ -70,5 +79,27 @@ class FileHandler
         if (!$this->fs->exists($dir)) {
             $this->fs->mkdir($dir);
         }
+    }
+
+    public function findFile($path)
+    {
+        $env = $this->getArgumentValue('env');
+        if ($env !== false && strpos($env, DIRECTORY_SEPARATOR) > 0) {
+            $envParts = explode(DIRECTORY_SEPARATOR, $env);
+            while(count($envParts)>0) {
+                $fileName = $this->preparePath($path,join(DIRECTORY_SEPARATOR, $envParts));
+                if ($this->fs->exists($fileName)) {
+                    return $fileName;
+                }
+                unset($envParts[count($envParts)-1]);
+            }
+        } else {
+            $fileName = $this->preparePath($path);
+            if ($this->fs->exists($fileName)) {
+                return $fileName;
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf('File "%s" for environment "%s" doesn\'t exists', $path, $env));
     }
 }

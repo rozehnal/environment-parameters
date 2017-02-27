@@ -58,6 +58,34 @@ by asking you the missing parameters.
  imports:
      - { resource: 'include.yml' }
 ```
+
+## Hierarchical structure
+
+```json
+{
+    "extra": {
+        "environment-parameters": {
+          "files": [
+			{
+			  "file": "{env}/key.p12",
+			  "name": "key.p12"
+			}
+          ],
+          "incenteev-parameters": {
+            "file": "{env}/parameters.yml"
+          }
+        }
+    }
+}
+```
+
+``composer run-script build --no-interaction -- --env=test/test01``
+
+Files are searched in order ``test/test01/key.p12``, ``test/key.p12`` 
+and ``test/test01/parameters.yml``, ``test/parameters.yml``. It means you are able to build configuration
+on inheritence from parent folders with overriding details in children folders. Applicable for both -
+files and ``*.yml`` files.
+
 ## Example
 https://github.com/rozehnal/environment-parameters-test
 

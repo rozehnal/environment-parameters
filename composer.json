@@ -1,7 +1,7 @@
 {
   "name": "rozehnal/environment-parameters",
-  "description": "Composer script building your detached parameters for deploying the app. Build above the great incenteev/composer-parameter-handler library.",
-  "keywords": ["parameters management"],
+  "description": "Composer script building your detached parameters for deploying the app. Built above the great incenteev/composer-parameter-handler library.",
+  "keywords": ["parameters management", "configuration", "environment management"],
   "homepage": "https://github.com/rozehnal/environment-parameters",
   "license": "MIT",
   "authors": [

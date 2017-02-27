@@ -14,7 +14,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcess($env, $configs, $expected)
     {
         $fs = $this->getMockBuilder('Symfony\\Component\\Filesystem\\Filesystem')
-            ->setMethods(array('copy'))
+            ->setMethods(array('copy', 'exists'))
             ->getMock();
 
         $fs->expects($this->once())
@@ -22,12 +22,16 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($expected['source']), $this->equalTo($expected['destination']))
             ->willReturn(true);
 
+        $fs->expects($this->once())
+            ->method('exists')
+            ->willReturn(true);
+
         $fileHandler = $this->getMockBuilder('Paro\\EnvironmentParameters\\FileHandler')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array($fs, array()))
             ->setMethods(array('getArgumentValue'))
             ->getMock();
 
-        $fileHandler->expects($this->once())
+        $fileHandler->expects($this->atLeastOnce())
             ->method('getArgumentValue')
             ->with($this->equalTo('env'))
             ->willReturn($env);
