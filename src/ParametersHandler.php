@@ -29,7 +29,7 @@ class ParametersHandler
         $fileProcessor = new FileProcessor($fs, $event->getIO(), $fileHandler);
         $fileProcessor->process($configs);
 
-        $incenteevProcessor = new IncenteevParametersProcessor($fileHandler);
+        $incenteevProcessor = new IncenteevParametersProcessor($fs, $fileHandler, $event->getIO());
         $incenteevProcessor->process($configs, $event);
     }
 }

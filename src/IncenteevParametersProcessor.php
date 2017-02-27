@@ -2,8 +2,10 @@
 
 namespace Paro\EnvironmentParameters;
 
+use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Incenteev\ParameterHandler\Processor;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
 
@@ -15,14 +17,26 @@ class IncenteevParametersProcessor
      * @var FileHandler
      */
     private $fileHandler;
+    /**
+     * @var IOInterface
+     */
+    private $io;
+    /**
+     * @var Filesystem
+     */
+    private $fs;
 
     /**
      * IncenteevParametersProcessor constructor.
+     * @param Filesystem $fs
      * @param FileHandler $fileHandler
+     * @param IOInterface $io
      */
-    public function __construct(FileHandler $fileHandler)
+    public function __construct(Filesystem $fs, FileHandler $fileHandler, IOInterface $io)
     {
         $this->fileHandler = $fileHandler;
+        $this->io = $io;
+        $this->fs = $fs;
     }
 
     /**
@@ -72,9 +86,10 @@ class IncenteevParametersProcessor
     /**
      * @param $inFile
      * @param null $outFile
+     * @param array $stack
      * @return array|bool|mixed
      */
-    public function processFile($inFile, $outFile = null)
+    public function processFile($inFile, $outFile = null, array $stack = array())
     {
         $yamlParser = new Parser();
         $values = $yamlParser->parse(file_get_contents($inFile));
@@ -83,14 +98,21 @@ class IncenteevParametersProcessor
 
         if (isset($values['imports']) && is_array($values['imports'])) {
             foreach ($values['imports'] as $importFile) {
-                $parametersFromFile = $this->processFile($this->fileHandler->resolvePath($inFile, $importFile['resource']));
+                $filePath = $this->fileHandler->resolvePath($inFile, $importFile['resource']);
+                $filePathFull = realpath($filePath);
+                if (in_array($filePathFull, $stack)) {
+                    $this->io->write(sprintf('<error>Skipping cyclic import in "%s" of the "%s" file</error>', $inFile, $filePath));
+                    continue;
+                }
+                $stack[] = $filePathFull;
+                $parametersFromFile = $this->processFile($filePath, null, $stack);
                 $values = array_replace_recursive($parametersFromFile, $values);
             }
             unset($values['imports']);
         }
 
         if (!is_null($outFile)) {
-            file_put_contents($outFile, Yaml::dump($values), 99);
+            $this->fs->dumpFile($outFile, Yaml::dump($values));
         } else {
             return $values;
         }

@@ -28,10 +28,13 @@ class FileHandler
 
     public function resolvePath($currentPath, $importPath)
     {
-        if (substr($importPath, 0, 1) == DIRECTORY_SEPARATOR) {
+        if ($this->fs->isAbsolutePath($importPath)) {
             return $this->preparePath($importPath);
         } else {
             $path = dirname($currentPath) . DIRECTORY_SEPARATOR . $importPath;
+            if (substr($path, 0, 4) == '././') {
+                $path = substr($path, 2);
+            }
             return $this->preparePath($path);
         }
     }
