@@ -23,7 +23,7 @@ Add the following in your root composer.json file:
     },
     "scripts": {
        "build": [
-             "Paro\\BuildParametersHandler\\ParametersHandler::buildParameters"
+             "Paro\\EnvironmentParameters\\ParametersHandler::buildParameters"
            ]
     },
     "extra": {

@@ -1,7 +1,7 @@
 <?php
-namespace Paro\BuildParametersHandler\Tests;
+namespace Paro\EnvironmentParameters\Tests;
 
-use Paro\BuildParametersHandler\FileHandler;
+use Paro\EnvironmentParameters\FileHandler;
 use Symfony\Component\Filesystem\Filesystem;
 
 class FileHandlerTest extends \PHPUnit_Framework_TestCase

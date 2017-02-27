@@ -1,7 +1,7 @@
 <?php
-namespace Paro\BuildParametersHandler\Tests;
+namespace Paro\EnvironmentParameters\Tests;
 
-use Paro\BuildParametersHandler\FileProcessor;
+use Paro\EnvironmentParameters\FileProcessor;
 
 class FileProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($expected['source']), $this->equalTo($expected['destination']))
             ->willReturn(true);
 
-        $fileHandler = $this->getMockBuilder('Paro\\BuildParametersHandler\\FileHandler')
+        $fileHandler = $this->getMockBuilder('Paro\\EnvironmentParameters\\FileHandler')
             ->disableOriginalConstructor()
             ->setMethods(array('getArgumentValue'))
             ->getMock();

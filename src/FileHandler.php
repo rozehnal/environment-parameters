@@ -1,6 +1,6 @@
 <?php
 
-namespace Paro\BuildParametersHandler;
+namespace Paro\EnvironmentParameters;
 
 use Symfony\Component\Filesystem\Filesystem;
 
