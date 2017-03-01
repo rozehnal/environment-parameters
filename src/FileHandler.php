@@ -51,7 +51,7 @@ class FileHandler
         }
 
         if ($env !== false) {
-            return str_replace("{env}", $env, $path);
+            return str_replace('{env}', $env, $path);
         } else {
             return $path;
         }
@@ -63,7 +63,7 @@ class FileHandler
      */
     public function getArgumentValue($name)
     {
-        return array_reduce($this->arguments, function($carry, $item) use ($name) {
+        return array_reduce($this->arguments, function ($carry, $item) use ($name) {
             if (substr(strtolower($item), 0, strlen($name) + 2) == '--' . $name) {
                 $val = explode('=', $item);
                 return trim($val[1]);
@@ -86,12 +86,17 @@ class FileHandler
         $env = $this->getArgumentValue('env');
         if ($env !== false && strpos($env, DIRECTORY_SEPARATOR) > 0) {
             $envParts = explode(DIRECTORY_SEPARATOR, $env);
-            while(count($envParts)>0) {
-                $fileName = $this->preparePath($path,join(DIRECTORY_SEPARATOR, $envParts));
+            while (count($envParts) > 0) {
+                $fileName = $this->preparePath($path, join(DIRECTORY_SEPARATOR, $envParts));
                 if ($this->fs->exists($fileName)) {
                     return $fileName;
                 }
-                unset($envParts[count($envParts)-1]);
+                unset($envParts[count($envParts) - 1]);
+            }
+            //root folder
+            $fileName = str_replace('{env}/', '', $path);
+            if ($this->fs->exists($fileName)) {
+                return $fileName;
             }
         } else {
             $fileName = $this->preparePath($path);
