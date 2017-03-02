@@ -112,6 +112,7 @@ class IncenteevParametersProcessor
         }
 
         if (!is_null($outFile)) {
+	        ksort($values[self::$PARAMETER_KEY]);
             $this->fs->dumpFile($outFile, Yaml::dump($values));
         } else {
             return $values;
