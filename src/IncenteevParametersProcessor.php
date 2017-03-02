@@ -125,7 +125,7 @@ class IncenteevParametersProcessor
     {
         $yamlParser = new Parser();
         $values = $yamlParser->parse(file_get_contents($file));
-        file_put_contents($file, sprintf("# This file is auto-generated during the build process at %s\n", date(DATE_ATOM)) . Yaml::dump($values), 99);
+        file_put_contents($file, sprintf("# This file is auto-generated during the build process of '%s' environment at %s\n", $this->fileHandler->getArgumentValue('env'), date(DATE_ATOM)) . Yaml::dump($values), 99);
     }
 
     protected function procesEnvironmentalVariables(array $parameters)
