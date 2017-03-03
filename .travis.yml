@@ -8,8 +8,6 @@ cache:
 
 matrix:
     include:
-        - php: 5.3.3
-          env: COMPOSER_FLAGS='--prefer-lowest --prefer-stable'
         - php: 5.3
           env: COMPOSER_FLAGS='--prefer-lowest --prefer-stable'
         - php: 5.4
