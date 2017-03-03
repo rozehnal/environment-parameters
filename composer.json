@@ -14,7 +14,7 @@
     "php": ">=5.3.3",
     "incenteev/composer-parameter-handler": "~2.0",
     "symfony/yaml": "~2.3|~3.0",
-    "symfony/filesystem": "~2.8|~3.2"
+    "symfony/filesystem": "~2.6|~3.2"
   },
   "require-dev": {
     "composer/composer": "1.0.*@dev",
