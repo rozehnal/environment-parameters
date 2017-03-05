@@ -86,6 +86,24 @@ and ``test/test01/parameters.yml``, ``test/parameters.yml``. It means you are ab
 on inheritence from parent folders with overriding details in children folders. Applicable for both -
 files and ``*.yml`` files.
 
+## Output formats [yaml, php-constants]
+Default output format is well-known``yaml`` file. Currently there is possible to create ``php`` 
+file where each parameter defines constant - ``define(key, value)``.
+
+```json
+{
+    "extra": {
+        "environment-parameters": {
+          "incenteev-parameters": {
+            "file": "{env}/parameters.yml",
+            "name": "parameters.php",
+            "output-format": "php-constants"
+          }
+        }
+    }
+}
+```
+
 ## Example
 https://github.com/rozehnal/environment-parameters-test
 

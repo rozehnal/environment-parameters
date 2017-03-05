@@ -5,6 +5,8 @@ namespace Paro\EnvironmentParameters;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Incenteev\ParameterHandler\Processor;
+use Paro\EnvironmentParameters\Adapter\Output\PHPConstantsOutputAdapter;
+use Paro\EnvironmentParameters\Adapter\Output\YamlOutputAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
@@ -46,6 +48,8 @@ class IncenteevParametersProcessor
      */
     public function process($configs, Event $event)
     {
+        $this->fs->remove($configs['build-folder']);
+
         if (!isset($configs['incenteev-parameters'])) {
             return true;
         }
@@ -77,7 +81,8 @@ class IncenteevParametersProcessor
             $processor->processFile($config);
             $this->fs->remove($outputFileName . '.dist');
 
-            $this->updateCommentInFile($outputFileName);
+            $outputFormat = isset($config['output-format']) ? $config['output-format'] : YamlOutputAdapter::getName();
+            $this->writeOutputFile($outputFileName, $outputFormat);
         }
 
         return true;
@@ -121,11 +126,31 @@ class IncenteevParametersProcessor
         return true;
     }
 
-    protected function updateCommentInFile($file)
+    /**
+     * @param $file
+     * @param $outputFormat
+     * @return mixed
+     */
+    protected function writeOutputFile($file, $outputFormat)
     {
         $yamlParser = new Parser();
         $values = $yamlParser->parse(file_get_contents($file));
-        file_put_contents($file, sprintf("# This file is auto-generated during the build process of '%s' environment at %s\n", $this->fileHandler->getArgumentValue('env'), date(DATE_ATOM)) . Yaml::dump($values), 99);
+        $values = $values[self::$PARAMETER_KEY];
+        $env = $this->fileHandler->getArgumentValue('env');
+        $outputFormat = strtolower($outputFormat);
+
+        $supportedAdapters = array(
+            new YamlOutputAdapter(self::$PARAMETER_KEY),
+            new PHPConstantsOutputAdapter(),
+        );
+
+        foreach ($supportedAdapters as $adapter) {
+            if (strtolower($adapter->getName()) === $outputFormat) {
+                return $adapter->process($values, $file, $env);
+            }
+        }
+
+        throw new \InvalidArgumentException(sprintf('Adapter "%s" doesn\'t exist', $outputFormat));
     }
 
     protected function processEnvironmentalVariables(array $parameters)
