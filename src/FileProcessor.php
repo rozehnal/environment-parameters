@@ -52,7 +52,7 @@ class FileProcessor
                 throw new \InvalidArgumentException('The extra.environment-parameters.files setting must be an array.');
             }
 
-            $path = $this->fileHandler->findFile($file['file']);
+            $path = $this->fileHandler->findFile($this->fileHandler->processEnvironmentalVariable($file['file']));
             $destination = $configs['build-folder'] . '/' . (isset($file['name']) ? $file['name'] : $path);
             $this->fs->copy($path, $destination, true);
             if (isset($file['name'])) {

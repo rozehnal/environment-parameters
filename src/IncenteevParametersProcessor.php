@@ -94,7 +94,7 @@ class IncenteevParametersProcessor
         $yamlParser = new Parser();
         $values = $yamlParser->parse(file_get_contents($this->fileHandler->findFile($inFile)));
 
-        $values[self::$PARAMETER_KEY] = $this->procesEnvironmentalVariables($values[self::$PARAMETER_KEY]);
+        $values[self::$PARAMETER_KEY] = $this->processEnvironmentalVariables($values[self::$PARAMETER_KEY]);
 
         if (isset($values['imports']) && is_array($values['imports'])) {
             foreach ($values['imports'] as $importFile) {
@@ -128,20 +128,14 @@ class IncenteevParametersProcessor
         file_put_contents($file, sprintf("# This file is auto-generated during the build process of '%s' environment at %s\n", $this->fileHandler->getArgumentValue('env'), date(DATE_ATOM)) . Yaml::dump($values), 99);
     }
 
-    protected function procesEnvironmentalVariables(array $parameters)
+    protected function processEnvironmentalVariables(array $parameters)
     {
-        return array_map(function($item) {
+        $t = $this; //php 5.3.x
+        return array_map(function($item) use ($t) {
             if (!is_string($item)) {
                 return $item;
             } else {
-                $item = trim($item);
-                if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
-                    $envName = substr(trim($item), 5);
-                    $envName = substr($envName, 0, strlen($envName) - 2);
-                    return getenv($envName);
-                } else {
-                    return $item;
-                }
+                return $t->fileHandler->processEnvironmentalVariable($item);
             }
         }, $parameters);
     }

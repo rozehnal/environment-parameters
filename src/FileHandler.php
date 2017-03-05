@@ -107,4 +107,25 @@ class FileHandler
 
         throw new \InvalidArgumentException(sprintf('File "%s" for environment "%s" doesn\'t exists', $path, $env));
     }
+
+    /**
+     * @param $itemSource
+     * @return string
+     */
+    public function processEnvironmentalVariable($itemSource)
+    {
+        $item = trim($itemSource);
+        if (substr(strtolower($item), 0, 5) === "%env(" && substr(strtolower($item), -2) == ')%') {
+            $envName = substr(trim($item), 5);
+            $envName = substr($envName, 0, strlen($envName) - 2);
+            if (($envValue = getenv($envName)) === false) {
+                throw new \InvalidArgumentException(sprintf('Environment variable "%s" doesn\'t exist', $envName));
+            } else {
+                return $envValue;
+            }
+        } else {
+            return $itemSource;
+        }
+
+    }
 }
