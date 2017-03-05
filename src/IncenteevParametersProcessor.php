@@ -69,15 +69,15 @@ class IncenteevParametersProcessor
 
             $file = $this->fileHandler->findFile($config['file']);
 
+            $outputFileName = $this->fileHandler->preparePath($configs['build-folder'] . '/' . (isset($config['name']) ? $config['name'] : $file));
+            $this->processFile($file, $outputFileName . '.dist');
 
-            $config['dist-file'] = $file;
-            $config['file'] = $this->fileHandler->preparePath($configs['build-folder'] . '/' . (isset($config['name']) ? $config['name'] : $file));
-            $this->processFile($config['dist-file'], $config['file']);
-
-            $config['dist-file'] = $config['file'];
+            $config['dist-file'] = $outputFileName . '.dist';
+            $config['file'] = $outputFileName;
             $processor->processFile($config);
+            $this->fs->remove($outputFileName . '.dist');
 
-            $this->updateCommentInFile($config['file']);
+            $this->updateCommentInFile($outputFileName);
         }
 
         return true;
