@@ -18,16 +18,12 @@
   },
   "require-dev": {
     "composer/composer": "1.0.*@dev",
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "mikey179/vfsStream": "~1"
   },
   "autoload": {
     "psr-4": {
       "Paro\\EnvironmentParameters\\": "src"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.x-dev"
     }
   }
 }

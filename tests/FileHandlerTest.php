@@ -1,6 +1,9 @@
 <?php
 namespace Paro\EnvironmentParameters\Tests;
 
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamWrapper;
 use Paro\EnvironmentParameters\FileHandler;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -113,23 +116,51 @@ class FileHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testInitDirectory()
     {
-        $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'testInitDirectory';
+        vfsStreamWrapper::register();
+        vfsStreamWrapper::setRoot(new vfsStreamDirectory('root'));
 
-        if (is_dir($dir)) {
-            rmdir($dir);
-        }
+        $buildDirName = 'createthis';
+        $buildDir = vfsStream::url('root/' . $buildDirName);
 
         //currently doesn't exists
-        $this->assertFalse(is_dir($dir));
+        $this->assertFalse(vfsStreamWrapper::getRoot()->hasChild($buildDirName));
 
         //create one
-        $this->fileHandler->initDirectory($dir);
-        $this->assertTrue(is_dir($dir));
-
-        //if is existing
-        $this->fileHandler->initDirectory($dir);
-        $this->assertTrue(is_dir($dir));
-
+        $this->fileHandler->initDirectory($buildDir);
+        $this->assertTrue(vfsStreamWrapper::getRoot()->hasChild($buildDirName));
     }
 
+    /**
+     * @param $expected
+     * @param $value
+     *
+     * @dataProvider testProcessEnvironmentalVariableProvider
+     */
+    public function testProcessEnvironmentalVariable($value, $expected)
+    {
+        $this->assertEquals($expected, $this->fileHandler->processEnvironmentalVariable($value));
+    }
+
+    public function testProcessEnvironmentalVariableProvider()
+    {
+        return array(
+            'string' => array(
+                'value' => 'string',
+                'expected' => 'string'
+            ),
+            'number' => array(
+                'value' => 444,
+                'expected' => 444
+            ),
+            'env variable' => array(
+                'value' => '%env(PATH)%',
+                'expected' => getenv('PATH')
+            ),
+
+            'string like env' => array(
+                'value' => 'env(PATH)%',
+                'expected' => 'env(PATH)%'
+            )
+        );
+    }
 }
