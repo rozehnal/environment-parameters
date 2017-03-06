@@ -14,9 +14,30 @@ class PHPConstantsOutputAdapter implements OutputAdapterInterface
     {
         $content = sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/\n", $env, date(DATE_ATOM));
         foreach ($parameters as $key => $value) {
-            $content .= sprintf("define('%s', '%s');\n", $key, is_array($value) ? serialize($value) : addslashes($value));
+            $content .= sprintf("define('%s', %s);\n", $key, $this->serialize($value));
         };
         file_put_contents($fileName, $content, 99);
     }
+
+	/**
+	 * @param $value
+	 * @return string
+	 */
+    protected function serialize($value) {
+	    switch (gettype($value)) {
+		    case 'boolean':
+			    return $value ? 'true' : 'false';
+		    case 'array':
+		    case 'object':
+			    return "'" . serialize($value) . "'";
+		    case 'NULL':
+			    return "null";
+		    case 'integer':
+		    case 'double':
+			    return $value;
+		    default:
+			    return "'" . addslashes($value) . "'";
+	    }
+	}
 
 }
