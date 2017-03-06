@@ -25,5 +25,10 @@
     "psr-4": {
       "Paro\\EnvironmentParameters\\": "src"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.x-dev"
+    }
   }
 }
