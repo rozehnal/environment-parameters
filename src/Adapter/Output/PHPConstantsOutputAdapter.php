@@ -29,15 +29,19 @@ class PHPConstantsOutputAdapter implements OutputAdapterInterface
 			    return $value ? 'true' : 'false';
 		    case 'array':
 		    case 'object':
-			    return "'" . addslashes(serialize($value)) . "'";
+			    return "'" . $this->addSlashes(serialize($value)) . "'";
 		    case 'NULL':
 			    return "null";
 		    case 'integer':
 		    case 'double':
 			    return $value;
 		    default:
-			    return "'" . addslashes($value) . "'";
+			    return "'" . $this->addslashes($value) . "'";
 	    }
+	}
+
+	private function addSlashes($value) {
+		return str_replace("'", "\\'", $value);
 	}
 
 }
