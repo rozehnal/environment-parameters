@@ -155,13 +155,14 @@ class IncenteevParametersProcessor
 
     protected function processEnvironmentalVariables(array $parameters)
     {
-        $t = $this; //php 5.3.x
-        return array_map(function($item) use ($t) {
-            if (!is_string($item)) {
-                return $item;
-            } else {
-                return $t->fileHandler->processEnvironmentalVariable($item);
-            }
-        }, $parameters);
+    	$processed = array();
+    	foreach ($parameters as $key => $parameter) {
+		    if (!is_string($parameter)) {
+			    $processed[$key] = $parameter;
+		    } else {
+			    $processed[$key] = $this->fileHandler->processEnvironmentalVariable($parameter);
+		    }
+	    }
+	    return $processed;
     }
 }
