@@ -29,7 +29,7 @@ class PHPConstantsOutputAdapter implements OutputAdapterInterface
 			    return $value ? 'true' : 'false';
 		    case 'array':
 		    case 'object':
-			    return "'" . serialize($value) . "'";
+			    return "'" . addslashes(serialize($value)) . "'";
 		    case 'NULL':
 			    return "null";
 		    case 'integer':
