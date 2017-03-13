@@ -9,6 +9,7 @@ compatible with all parameters from https://github.com/Incenteev/ParameterHandle
 [![Code Coverage](https://scrutinizer-ci.com/g/rozehnal/environment-parameters/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rozehnal/environment-parameters/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/6e3890ac-6436-4166-afd4-f87d089e1774/mini.png)](https://insight.sensiolabs.com/projects/6e3890ac-6436-4166-afd4-f87d089e1774)
 [![Latest Unstable Version](https://poser.pugx.org/rozehnal/environment-parameters/v/unstable.png)](https://packagist.org/packages/rozehnal/environment-parameters/)
+[![Latest Stable Version](https://poser.pugx.org/rozehnal/environment-parameters/v/stable)](https://packagist.org/packages/rozehnal/environment-parameters)
 
 ## Run
 ``composer run-script build --no-interaction -- --env=prod``

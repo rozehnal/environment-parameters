@@ -63,7 +63,7 @@ class FileHandler
      */
     public function getArgumentValue($name)
     {
-        return array_reduce($this->arguments, function ($carry, $item) use ($name) {
+        return array_reduce($this->arguments, function($carry, $item) use ($name) {
             if (substr(strtolower($item), 0, strlen($name) + 2) == '--' . $name) {
                 $val = explode('=', $item);
                 return trim($val[1]);

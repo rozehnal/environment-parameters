@@ -19,29 +19,31 @@ class PHPConstantsOutputAdapter implements OutputAdapterInterface
         file_put_contents($fileName, $content, 99);
     }
 
-	/**
-	 * @param $value
-	 * @return string
-	 */
-    protected function serialize($value) {
-	    switch (gettype($value)) {
-		    case 'boolean':
-			    return $value ? 'true' : 'false';
-		    case 'array':
-		    case 'object':
-			    return "'" . $this->addSlashes(serialize($value)) . "'";
-		    case 'NULL':
-			    return "null";
-		    case 'integer':
-		    case 'double':
-			    return $value;
-		    default:
-			    return "'" . $this->addslashes($value) . "'";
-	    }
-	}
+    /**
+     * @param $value
+     * @return string
+     */
+    protected function serialize($value)
+    {
+        switch (gettype($value)) {
+            case 'boolean':
+                return $value ? 'true' : 'false';
+            case 'array':
+            case 'object':
+                return "'" . $this->addSlashes(serialize($value)) . "'";
+            case 'NULL':
+                return "null";
+            case 'integer':
+            case 'double':
+                return $value;
+            default:
+                return "'" . $this->addSlashes($value) . "'";
+        }
+    }
 
-	private function addSlashes($value) {
-		return str_replace("'", "\\'", $value);
-	}
+    private function addSlashes($value)
+    {
+        return str_replace("'", "\\'", $value);
+    }
 
 }

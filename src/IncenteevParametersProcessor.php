@@ -90,7 +90,7 @@ class IncenteevParametersProcessor
 
     /**
      * @param $inFile
-     * @param null $outFile
+     * @param string|null $outFile
      * @param array $stack
      * @return array|bool|mixed
      */
@@ -117,7 +117,7 @@ class IncenteevParametersProcessor
         }
 
         if (!is_null($outFile)) {
-	        ksort($values[self::$PARAMETER_KEY]);
+            ksort($values[self::$PARAMETER_KEY]);
             $this->fs->dumpFile($outFile, Yaml::dump($values));
         } else {
             return $values;
@@ -155,14 +155,14 @@ class IncenteevParametersProcessor
 
     protected function processEnvironmentalVariables(array $parameters)
     {
-    	$processed = array();
-    	foreach ($parameters as $key => $parameter) {
-		    if (!is_string($parameter)) {
-			    $processed[$key] = $parameter;
-		    } else {
-			    $processed[$key] = $this->fileHandler->processEnvironmentalVariable($parameter);
-		    }
-	    }
-	    return $processed;
+        $processed = array();
+        foreach ($parameters as $key => $parameter) {
+            if (!is_string($parameter)) {
+                $processed[$key] = $parameter;
+            } else {
+                $processed[$key] = $this->fileHandler->processEnvironmentalVariable($parameter);
+            }
+        }
+        return $processed;
     }
 }
