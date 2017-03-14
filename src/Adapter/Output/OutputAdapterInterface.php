@@ -8,10 +8,12 @@ interface OutputAdapterInterface
      */
     public static function getName();
 
-    /**
-     * @param $parameters
-     * @param $fileName
-     * @param $env
-     */
-    public function process($parameters, $fileName, $env);
+	/**
+	 * @param $parameters
+	 * @param $fileName
+	 * @param $env
+	 * @param null|int $date
+	 * @return
+	 */
+    public function process($parameters, $fileName, $env, $date = null);
 }

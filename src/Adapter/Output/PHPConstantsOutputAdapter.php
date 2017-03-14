@@ -10,9 +10,13 @@ class PHPConstantsOutputAdapter implements OutputAdapterInterface
         return 'php-constants';
     }
 
-    public function process($parameters, $fileName, $env)
+    public function process($parameters, $fileName, $env, $date = null)
     {
-        $content = sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/\n", $env, date(DATE_ATOM));
+    	if (is_null($date)) {
+    		$date = time();
+	    }
+
+        $content = sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/\n", $env, date(DATE_ATOM, $date));
         foreach ($parameters as $key => $value) {
             $content .= sprintf("define('%s', %s);\n", $key, $this->serialize($value));
         };

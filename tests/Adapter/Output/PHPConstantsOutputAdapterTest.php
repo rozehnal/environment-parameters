@@ -26,18 +26,19 @@ class PHPConstantsOutputAdapterTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @dataProvider processProvider
 	 */
-	public function testProcess($parameters, $fileName, $env, $expected) {
+	public function testProcess($parameters, $fileName, $env, $date, $expected) {
 		vfsStreamWrapper::register();
 		vfsStreamWrapper::setRoot(new vfsStreamDirectory('root'));
 
 		$fileNameVFS = vfsStream::url('root/' . $fileName);
-		$this->PHPConstantsOutputAdapter->process($parameters, $fileNameVFS, $env);
+		$this->PHPConstantsOutputAdapter->process($parameters, $fileNameVFS, $env, $date);
 		$actual = file_get_contents(vfsStream::url('root/' . $fileName));
 		$this->assertEquals($expected, $actual);
 		vfsStreamWrapper::unregister();
 	}
 
 	public function processProvider() {
+		$date = time();
 		return array(
 			'number' => array(
 				'parameters' => array(
@@ -46,8 +47,9 @@ class PHPConstantsOutputAdapterTest extends \PHPUnit_Framework_TestCase {
 				),
 				'fileName' => 'parameters.php',
 				'env' => 'devlike/test',
+				'date' => $date,
 				'expected' => sprintf("%s\n%s\n%s\n",
-					sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/", 'devlike/test', date(DATE_ATOM)),
+					sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/", 'devlike/test', date(DATE_ATOM, $date)),
 					"define('PARAMETER', 1100);",
 					"define('PARAMETER1', 1.1);"
 				),
@@ -59,8 +61,9 @@ class PHPConstantsOutputAdapterTest extends \PHPUnit_Framework_TestCase {
 				),
 				'fileName' => 'parameters.php',
 				'env' => 'devlike/test',
+				'date' => $date,
 				'expected' => sprintf("%s\n%s\n",
-					sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/", 'devlike/test', date(DATE_ATOM)),
+					sprintf("<?php\n/** This file is auto-generated during the build process of '%s' environment at %s **/", 'devlike/test', date(DATE_ATOM, $date)),
 					sprintf("define('PARAMETER', '%s');", "a:5:{i:0;i:100;i:1;i:200;i:2;i:300;i:3;s:4:\"aaa\\'\";i:4;a:1:{i:0;s:3:\"\\'\"\\'\";}}")
 				),
 

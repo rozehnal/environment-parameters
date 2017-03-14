@@ -22,9 +22,13 @@ class YamlOutputAdapter implements OutputAdapterInterface
         return 'yaml';
     }
 
-    public function process($parameters, $fileName, $env)
+    public function process($parameters, $fileName, $env, $date = null)
     {
-        file_put_contents($fileName, sprintf("# This file is auto-generated during the build process of '%s' environment at %s\n", $env, date(DATE_ATOM)) . Yaml::dump(array($this->parameterKey => $parameters)), 99);
+	    if (is_null($date)) {
+		    $date = time();
+	    }
+
+        file_put_contents($fileName, sprintf("# This file is auto-generated during the build process of '%s' environment at %s\n", $env, date(DATE_ATOM, $date)) . Yaml::dump(array($this->parameterKey => $parameters)), 99);
     }
 
 }
