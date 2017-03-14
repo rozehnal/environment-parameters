@@ -16,7 +16,7 @@ class PHPConstantsOutputAdapter implements OutputAdapterInterface
         foreach ($parameters as $key => $value) {
             $content .= sprintf("define('%s', %s);\n", $key, $this->serialize($value));
         };
-        file_put_contents($fileName, $content, 99);
+        file_put_contents($fileName, $content);
     }
 
     /**
