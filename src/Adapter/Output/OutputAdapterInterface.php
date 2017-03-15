@@ -15,5 +15,5 @@ interface OutputAdapterInterface
 	 * @param null|int $date
 	 * @return
 	 */
-    public function process($parameters, $fileName, $env, $date = null);
+    public function process($parameters, $fileName, $env, $date);
 }

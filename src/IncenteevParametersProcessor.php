@@ -146,7 +146,7 @@ class IncenteevParametersProcessor
 
         foreach ($supportedAdapters as $adapter) {
             if (strtolower($adapter->getName()) === $outputFormat) {
-                return $adapter->process($values, $file, $env);
+                return $adapter->process($values, $file, $env, time());
             }
         }
 
